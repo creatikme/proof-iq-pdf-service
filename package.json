@@ -1,0 +1,19 @@
+{
+  "name": "proof-iq-pdf-service",
+  "version": "1.0.0",
+  "description": "PDF generation service for ProofIQ",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'Build successful'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.943.0",
+    "@cf-wasm/resvg": "^0.3.2",
+    "pdf-lib": "^1.17.1"
+  }
+}
