@@ -11,9 +11,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.943.0",
     "@cf-wasm/resvg": "^0.3.2",
     "@neondatabase/serverless": "^1.0.2",
     "@vercel/node": "^3.0.0",
-    "pdf-lib": "^1.17.1"
+    "pdf-lib": "^1.17.1",
+    "resend": "^6.5.2"
   }
 }
