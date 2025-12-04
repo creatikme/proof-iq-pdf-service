@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { convertSvgToPdf } from './svgToPdf.js';
-import reportSvg from './report.svg';
+import { convertSvgToPdf } from './svgToPdf';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 interface CalculatorInputs {
 	annual_lifeline_enrollments: number;
@@ -44,6 +45,10 @@ export default async function handler(
 			annual_order_volume,
 			average_non_compliance_cost,
 		};
+
+		// Read SVG file
+		const svgPath = join(__dirname, 'report.svg');
+		const reportSvg = readFileSync(svgPath, 'utf-8');
 
 		// Generate PDF with calculated ROI values
 		const pdfBytes = await convertSvgToPdf(reportSvg, 1200, calculatorData);
