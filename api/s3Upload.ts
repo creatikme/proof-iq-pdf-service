@@ -27,7 +27,7 @@ export async function uploadPdfToS3(
 
 	// Generate unique file name with timestamp under proof-iq/ path
 	const timestamp = Date.now();
-	const uniqueFileName = `proof-iq/${timestamp}-${fileName}.pdf`;
+	const uniqueFileName = `proof-iq/reports/${timestamp}-${fileName}.pdf`;
 
 	// Upload to S3
 	const command = new PutObjectCommand({
