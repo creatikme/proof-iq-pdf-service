@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { sql } from '@vercel/postgres';
+import { neon } from '@neondatabase/serverless';
 import { convertSvgToPdf } from './svgToPdf';
 import { uploadPdfToS3 } from './s3Upload';
 import { sendROIReportEmail } from './emailService';
@@ -127,7 +127,8 @@ export default async function handler(
 			}
 		}
 
-		// Insert lead into Vercel Postgres
+		// Insert lead into Neon Postgres
+		const sql = neon(process.env.DATABASE_URL!);
 		const result = await sql`
 			INSERT INTO leads (
 				name, email, phone, company, message, source,
@@ -147,7 +148,7 @@ export default async function handler(
 
 		return response.status(201).json({
 			success: true,
-			leadId: result.rows[0].id,
+			leadId: result[0].id,
 			pdfUrl,
 			emailSent,
 			message: 'Lead created successfully' + (emailSent ? ' and email sent' : ''),

@@ -12,8 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "@cf-wasm/resvg": "^0.3.2",
+    "@neondatabase/serverless": "^1.0.2",
     "@vercel/node": "^3.0.0",
-    "@vercel/postgres": "^0.10.0",
     "pdf-lib": "^1.17.1"
   }
 }
