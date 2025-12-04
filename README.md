@@ -1,6 +1,6 @@
 # ProofIQ PDF Generation Service
 
-This is a Vercel serverless function that handles PDF generation for ProofIQ ROI reports.
+This is a Vercel serverless function that handles PDF generation for ProofIQ ROI report.
 
 ## Setup
 
