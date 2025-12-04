@@ -4,7 +4,7 @@
   "description": "PDF generation service for ProofIQ",
   "main": "index.js",
   "scripts": {
-    "dev": "vercel dev",
+    "start": "vercel dev --yes",
     "build": "echo 'Build successful'"
   },
   "keywords": [],
