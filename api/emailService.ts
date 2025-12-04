@@ -51,7 +51,7 @@ function createEmailTemplate(data: EmailData): string {
 		? `We've prepared a personalized ROI analysis for ${company}.`
 		: "We've prepared a personalized ROI analysis for your organization.";
 	
-	const logoUrl = 'https://rwkxzth5o4gld2dh.public.blob.vercel-storage.com/proof-iq-logo.svg';
+	const logoUrl = 'https://rwkxzth5o4gld2dh.public.blob.vercel-storage.com/proof-iq-logo.png';
 
 	const pdfSection = pdfUrl
 		? `
