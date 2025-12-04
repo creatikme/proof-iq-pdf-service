@@ -86,7 +86,7 @@ function createEmailTemplate(data: EmailData): string {
 				<table role="presentation" style="max-width: 600px; width: 100%; background-color: #ffffff; border: 1px solid #e4e4e7;">
 					
 					<tr>
-						<td style="padding: 32px 40px; border-bottom: 1px solid #e4e4e7;">
+						<td style="padding: 20px 40px; border-bottom: 1px solid #e4e4e7;">
 							<img src="${logoUrl}" alt="ProofIQ" width="134" height="34" style="display: block; border: 0;">
 						</td>
 					</tr>
@@ -153,8 +153,8 @@ function createEmailTemplate(data: EmailData): string {
 					</tr>
 
 					<tr>
-						<td style="padding: 24px 40px; background-color: #fafafa; border-top: 1px solid #e4e4e7;">
-							<p style="margin: 0 0 8px; color: #71717a; font-size: 13px;">
+						<td style="padding: 16px 40px; background-color: #fafafa; border-top: 1px solid #e4e4e7;">
+							<p style="margin: 0 0 4px; color: #71717a; font-size: 13px;">
 								ProofIQ
 							</p>
 							<p style="margin: 0; color: #a1a1aa; font-size: 13px;">
