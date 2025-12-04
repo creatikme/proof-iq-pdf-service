@@ -47,6 +47,27 @@ export async function sendROIReportEmail(
 function createEmailTemplate(data: EmailData): string {
 	const { name, company, pdfUrl } = data;
 	const firstName = name.split(' ')[0];
+	const companyText = company
+		? `We've prepared a personalized ROI analysis for ${company}.`
+		: "We've prepared a personalized ROI analysis for your organization.";
+
+	const pdfSection = pdfUrl
+		? `
+			<p style="margin: 0 0 24px; color: #3f3f46; font-size: 15px;">
+				Your custom report is ready to download and includes detailed projections based on your specific requirements.
+			</p>
+
+			<table role="presentation" style="width: 100%; margin: 0 0 32px;">
+				<tr>
+					<td>
+						<a href="${pdfUrl}" style="display: inline-block; padding: 12px 24px; background-color: #18181b; color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 500; border-radius: 4px;">
+							Download Your ROI Report
+						</a>
+					</td>
+				</tr>
+			</table>
+		`
+		: '';
 
 	return `
 <!DOCTYPE html>
@@ -56,144 +77,88 @@ function createEmailTemplate(data: EmailData): string {
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Your ProofIQ ROI Report</title>
 </head>
-<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f7fa;">
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f4f4f5; line-height: 1.6;">
 	<table role="presentation" style="width: 100%; border-collapse: collapse;">
 		<tr>
 			<td align="center" style="padding: 40px 20px;">
-				<table role="presentation" style="max-width: 600px; width: 100%; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+				<table role="presentation" style="max-width: 600px; width: 100%; background-color: #ffffff; border: 1px solid #e4e4e7;">
 					
-					<!-- Header -->
 					<tr>
-						<td style="padding: 40px 40px 30px; text-align: center; background: linear-gradient(135deg, #5a7fe6 0%, #3d5fc4 100%); border-radius: 12px 12px 0 0;">
-							<h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 700; letter-spacing: -0.5px;">
-								🛡️ ProofIQ
+						<td style="padding: 32px 40px; border-bottom: 1px solid #e4e4e7;">
+							<h1 style="margin: 0; color: #18181b; font-size: 22px; font-weight: 600; letter-spacing: -0.3px;">
+								ProofIQ
 							</h1>
-							<p style="margin: 10px 0 0; color: #e8eeff; font-size: 14px;">
-								AI-Powered Lifeline Compliance Audits
-							</p>
 						</td>
 					</tr>
 
-					<!-- Main Content -->
 					<tr>
 						<td style="padding: 40px;">
-							<h2 style="margin: 0 0 20px; color: #1a1a1a; font-size: 24px; font-weight: 600;">
+							<p style="margin: 0 0 24px; color: #18181b; font-size: 16px;">
 								Hi ${firstName},
-							</h2>
+							</p>
 							
-							<p style="margin: 0 0 16px; color: #4a5568; font-size: 16px; line-height: 1.6;">
-								Thank you for your interest in ProofIQ! We've prepared a personalized ROI analysis ${company ? `for <strong>${company}</strong>` : 'for your organization'}.
+							<p style="margin: 0 0 20px; color: #3f3f46; font-size: 15px;">
+								Thank you for your interest in ProofIQ. ${companyText}
 							</p>
 
-							<p style="margin: 0 0 24px; color: #4a5568; font-size: 16px; line-height: 1.6;">
-								Your custom report shows the measurable impact ProofIQ can deliver:
+							${pdfSection}
+
+							<p style="margin: 0 0 16px; color: #3f3f46; font-size: 15px;">
+								ProofIQ helps Lifeline providers streamline compliance audits through:
 							</p>
 
-							<!-- Benefits List -->
-							<table role="presentation" style="width: 100%; margin-bottom: 30px;">
+							<table role="presentation" style="width: 100%; margin-bottom: 32px;">
 								<tr>
-									<td style="padding: 16px; background-color: #f0f4ff; border-radius: 8px; margin-bottom: 12px;">
-										<div style="display: flex; align-items: start;">
-											<span style="font-size: 24px; margin-right: 12px;">⚡</span>
-											<div>
-												<strong style="color: #2d3748; font-size: 16px; display: block; margin-bottom: 4px;">
-													90%+ Faster Audit Processing
-												</strong>
-												<span style="color: #5a6c7d; font-size: 14px;">
-													Automate NLAD/RAD checks, duplicate detection, and eligibility validations
-												</span>
-											</div>
-										</div>
+									<td style="padding: 0 0 12px 0;">
+										<p style="margin: 0; color: #3f3f46; font-size: 15px;">
+											<strong style="color: #18181b;">Automated audit processing</strong> &mdash; NLAD/RAD verification, duplicate detection, and eligibility checks
+										</p>
 									</td>
 								</tr>
 								<tr>
-									<td style="padding: 16px; background-color: #f0f4ff; border-radius: 8px; margin-bottom: 12px;">
-										<div style="display: flex; align-items: start;">
-											<span style="font-size: 24px; margin-right: 12px;">✅</span>
-											<div>
-												<strong style="color: #2d3748; font-size: 16px; display: block; margin-bottom: 4px;">
-													Near-Perfect Compliance Accuracy
-												</strong>
-												<span style="color: #5a6c7d; font-size: 14px;">
-													Eliminate human errors with AI-powered FCC/USAC rule enforcement
-												</span>
-											</div>
-										</div>
+									<td style="padding: 0 0 12px 0;">
+										<p style="margin: 0; color: #3f3f46; font-size: 15px;">
+											<strong style="color: #18181b;">Improved accuracy</strong> &mdash; AI-powered validation against FCC and USAC requirements
+										</p>
 									</td>
 								</tr>
 								<tr>
-									<td style="padding: 16px; background-color: #f0f4ff; border-radius: 8px;">
-										<div style="display: flex; align-items: start;">
-											<span style="font-size: 24px; margin-right: 12px;">💰</span>
-											<div>
-												<strong style="color: #2d3748; font-size: 16px; display: block; margin-bottom: 4px;">
-													Significant Cost Savings
-												</strong>
-												<span style="color: #5a6c7d; font-size: 14px;">
-													Reduce manual review time and avoid costly non-compliance penalties
-												</span>
-											</div>
-										</div>
+									<td style="padding: 0 0 0 0;">
+										<p style="margin: 0; color: #3f3f46; font-size: 15px;">
+											<strong style="color: #18181b;">Reduced costs</strong> &mdash; Less manual review time and fewer compliance penalties
+										</p>
 									</td>
 								</tr>
 							</table>
 
-							${
-								pdfUrl
-									? `
-							<!-- Download Report Section -->
-							<table role="presentation" style="width: 100%; margin: 30px 0; padding: 24px; background: linear-gradient(135deg, #f0f4ff 0%, #e8eeff 100%); border-radius: 12px; border: 2px solid #5a7fe6;">
-								<tr>
-									<td align="center">
-										<p style="margin: 0 0 16px; color: #2d3748; font-size: 18px; font-weight: 600;">
-											📊 Your Personalized ROI Report is Ready!
-										</p>
-										<p style="margin: 0 0 20px; color: #5a6c7d; font-size: 14px;">
-											Click below to download your detailed analysis
-										</p>
-										<a href="${pdfUrl}" style="display: inline-block; padding: 14px 32px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 15px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
-											⬇️ Download Your Report
-										</a>
-									</td>
-								</tr>
-							</table>
-							`
-									: ''
-							}
+							<p style="margin: 0 0 24px; color: #3f3f46; font-size: 15px;">
+								We'd be happy to walk you through the report and answer any questions you have about implementing ProofIQ.
+							</p>
 
-							<!-- CTA Button -->
-							<table role="presentation" style="width: 100%; margin: 30px 0;">
+							<table role="presentation" style="width: 100%; margin: 0 0 32px;">
 								<tr>
-									<td align="center">
-										<a href="https://proofiqapp.com/demo" style="display: inline-block; padding: 16px 40px; background: linear-gradient(135deg, #5a7fe6 0%, #3d5fc4 100%); color: #ffffff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 12px rgba(90, 127, 230, 0.3);">
-											📅 Schedule Your Demo
+									<td>
+										<a href="https://proofiqapp.com/demo" style="display: inline-block; padding: 12px 24px; background-color: #18181b; color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 500; border-radius: 4px;">
+											Schedule a Demo
 										</a>
 									</td>
 								</tr>
 							</table>
 
-							<p style="margin: 30px 0 0; color: #4a5568; font-size: 16px; line-height: 1.6;">
-								Ready to transform your Lifeline compliance operations? Let's discuss how ProofIQ can become your competitive advantage.
-							</p>
-
-							<p style="margin: 20px 0 0; color: #4a5568; font-size: 16px; line-height: 1.6;">
+							<p style="margin: 0; color: #3f3f46; font-size: 15px;">
 								Best regards,<br>
-								<strong style="color: #2d3748;">The ProofIQ Team</strong>
+								The ProofIQ Team
 							</p>
 						</td>
 					</tr>
 
-					<!-- Footer -->
 					<tr>
-						<td style="padding: 30px 40px; background-color: #f8fafc; border-radius: 0 0 12px 12px; text-align: center;">
-							<p style="margin: 0 0 12px; color: #718096; font-size: 14px;">
-								<strong>ProofIQ</strong> - AI-Powered Lifeline Compliance Audits
+						<td style="padding: 24px 40px; background-color: #fafafa; border-top: 1px solid #e4e4e7;">
+							<p style="margin: 0 0 8px; color: #71717a; font-size: 13px;">
+								ProofIQ
 							</p>
-							<p style="margin: 0 0 12px; color: #a0aec0; font-size: 13px;">
-								Maximize Accuracy. Minimize Delays.
-							</p>
-							<p style="margin: 0; color: #cbd5e0; font-size: 12px;">
-								© ${new Date().getFullYear()} ProofIQ. All rights reserved.
+							<p style="margin: 0; color: #a1a1aa; font-size: 13px;">
+								&copy; ${new Date().getFullYear()} ProofIQ. All rights reserved.
 							</p>
 						</td>
 					</tr>
