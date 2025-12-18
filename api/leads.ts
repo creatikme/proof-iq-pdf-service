@@ -2,7 +2,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { neon } from '@neondatabase/serverless';
 import { convertSvgToPdf } from './svgToPdf';
 import { uploadPdfToS3 } from './s3Upload';
-import { sendROIReportEmail } from './emailService';
+import { sendROIReportEmail, sendAdminNotificationEmail } from './emailService';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -75,6 +75,7 @@ export default async function handler(
 
 		let pdfUrl: string | null = null;
 		let emailSent = false;
+		let adminNotified = false;
 
 		// Start DB insert and PDF generation in parallel
 		const sql = neon(process.env.DATABASE_URL!);
@@ -130,14 +131,30 @@ export default async function handler(
 				pdfUrl = await uploadPdfToS3(pdfResult, sanitizedEmail, s3Config);
 				console.log('PDF uploaded:', pdfUrl);
 
-				// Send email and update DB in parallel
-				const [emailResult] = await Promise.all([
+				// Send emails and update DB in parallel
+				const [emailResult, adminResult] = await Promise.all([
 					sendROIReportEmail(
 						{ name, email, company, pdfUrl },
 						process.env.RESEND_API_KEY!
 					),
+					sendAdminNotificationEmail(
+						{
+							name,
+							email,
+							phone,
+							company,
+							message,
+							source,
+							pdfUrl,
+							annual_lifeline_enrollments,
+							average_review_time_seconds,
+							annual_order_volume,
+							average_non_compliance_cost,
+						},
+						process.env.RESEND_API_KEY!
+					),
 					sql`
-						UPDATE leads 
+						UPDATE leads
 						SET pdf_report_url = ${pdfUrl}, updated_at = NOW()
 						WHERE id = ${leadId}
 					`,
@@ -149,8 +166,43 @@ export default async function handler(
 				} else {
 					console.error('Failed to send email:', emailResult.error);
 				}
+
+				if (adminResult.success) {
+					console.log('Admin notified successfully:', adminResult.emailId);
+					adminNotified = true;
+				} else {
+					console.error('Failed to notify admin:', adminResult.error);
+				}
 			} catch (pdfError) {
 				console.error('Error processing PDF/email:', pdfError);
+			}
+		} else {
+			// No PDF, but still notify admin about the new lead
+			try {
+				const adminResult = await sendAdminNotificationEmail(
+					{
+						name,
+						email,
+						phone,
+						company,
+						message,
+						source,
+						annual_lifeline_enrollments,
+						average_review_time_seconds,
+						annual_order_volume,
+						average_non_compliance_cost,
+					},
+					process.env.RESEND_API_KEY!
+				);
+
+				if (adminResult.success) {
+					console.log('Admin notified successfully:', adminResult.emailId);
+					adminNotified = true;
+				} else {
+					console.error('Failed to notify admin:', adminResult.error);
+				}
+			} catch (adminError) {
+				console.error('Error sending admin notification:', adminError);
 			}
 		}
 
