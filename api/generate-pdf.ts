@@ -51,7 +51,7 @@ export default async function handler(
 		const reportSvg = readFileSync(svgPath, 'utf-8');
 
 		// Generate PDF with calculated ROI values
-		const pdfBytes = await convertSvgToPdf(reportSvg, 1200, calculatorData);
+		const pdfBytes = await convertSvgToPdf(reportSvg, 2400, calculatorData);
 
 		// Return PDF as base64
 		const pdfBase64 = Buffer.from(pdfBytes).toString('base64');

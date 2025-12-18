@@ -79,7 +79,7 @@ export default async function handler(
 
 		// Start DB insert and PDF generation in parallel
 		const sql = neon(process.env.DATABASE_URL!);
-		
+
 		const [dbResult, pdfResult] = await Promise.all([
 			// Database insert
 			sql`
@@ -101,15 +101,15 @@ export default async function handler(
 			// PDF generation (if needed)
 			hasCalculatorData
 				? (async () => {
-						const svgPath = join(__dirname, 'report.svg');
-						const reportSvg = readFileSync(svgPath, 'utf-8');
-						return convertSvgToPdf(reportSvg, 1200, {
-							annual_lifeline_enrollments: annual_lifeline_enrollments!,
-							average_review_time_seconds: average_review_time_seconds!,
-							annual_order_volume: annual_order_volume!,
-							average_non_compliance_cost: average_non_compliance_cost!,
-						});
-				  })()
+					const svgPath = join(__dirname, 'report.svg');
+					const reportSvg = readFileSync(svgPath, 'utf-8');
+					return convertSvgToPdf(reportSvg, 2400, {
+						annual_lifeline_enrollments: annual_lifeline_enrollments!,
+						average_review_time_seconds: average_review_time_seconds!,
+						annual_order_volume: annual_order_volume!,
+						average_non_compliance_cost: average_non_compliance_cost!,
+					});
+				})()
 				: Promise.resolve(null),
 		]);
 
